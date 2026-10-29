@@ -25,18 +25,25 @@ export function createApp(config: RigConfig = loadConfig()) {
     const night = /^\d{4}-\d{2}-\d{2}$/.test(id) ? readNight(config.runsDir, id) : null;
     if (!night) {
       return c.html(
-        <Layout title={`digest · ${id}`} lane={lane()}>
-          <h1>digest · {id}</h1>
+        <Layout title={`digest Â· ${id}`} lane={lane()}>
+          <h1>digest Â· {id}</h1>
           <p>no such night</p>
         </Layout>,
         404,
       );
     }
     return c.html(
-      <Layout title={`digest · ${night.night}`} lane={lane()}>
+      <Layout title={`digest Â· ${night.night}`} lane={lane()}>
         <DigestPage night={night} />
       </Layout>,
     );
+  });
+
+  app.get('/api/digest/:night', (c) => {
+    const night = c.req.param('night');
+    const data = /^\d{4}-\d{2}-\d{2}$/.test(night) ? readNight(config.runsDir, night) : null;
+    if (!data) return c.json({ error: 'no such night' }, 404);
+    return c.json(data);
   });
 
   return app;
