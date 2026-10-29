@@ -32,7 +32,7 @@ describe('digest page', () => {
     expect(res.status).toBe(200);
     for (const job of JOBS) expect(html).toContain(job);
     expect(html).toContain('—');
-    expect(html).toContain("didn't parse");
+    expect(html).toMatch(/didn(&#39;|')t parse/);
   });
 
   it('404s for a night without a file', async () => {
@@ -48,7 +48,7 @@ describe('digest page', () => {
   it('mentions the bad line in a night with one', async () => {
     const res = await app.request('/digest/2026-10-31');
     expect(res.status).toBe(200);
-    expect(await res.text()).toContain("didn't parse");
+    expect(await res.text()).toMatch(/didn(&#39;|')t parse/);
   });
 });
 
